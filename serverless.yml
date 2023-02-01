@@ -1,0 +1,19 @@
+service: layout-001-nestjs-aws-lambda
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  main:
+    handler: dist/main.handler
+    events:
+      - http:
+          method: GET
+          path: /test
+      - http:
+          method: ANY
+          path: '{proxy+}'

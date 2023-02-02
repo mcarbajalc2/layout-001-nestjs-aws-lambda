@@ -15,5 +15,8 @@ functions:
           method: GET
           path: /test
       - http:
+          method: POST
+          path: /test
+      - http:
           method: ANY
           path: '{proxy+}'

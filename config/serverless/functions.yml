@@ -1,0 +1,14 @@
+main:
+  handler: dist/main.handler
+  events:
+    - http:
+        method: GET
+        path: /test
+        cors: true
+        request:
+        parameters:
+          paths:
+          id: true
+    - http:
+        method: ANY
+        path: "{proxy+}"

@@ -1,3 +1,4 @@
+# Nombre del servicio
 service: layout-001-nestjs-aws-lambda
 
 plugins:
@@ -6,14 +7,27 @@ plugins:
 provider:
   name: aws
   runtime: nodejs14.x
+  stage: ${opt:stage}
+  iam:
+    # Se debe crear este rol
+    role: arn:aws:iam::${self:custom.accountId}:role/ROLE_EXAMPLE_API
+  environment:
+    # Se debe crear la base de datos en RDS
+    # Habilitar el acceso publico de la misma
+    # Crear el parametro en SSM Parameter Store
+    RDS_EXAMPLE_DATABASE: ssm:/${self:custom.name}/${opt:stage}/RDS-EXAMPLE-DATABASE
 
-functions:
-  main:
-    handler: dist/main.handler
-    events:
-      - http:
-          method: GET
-          path: /test
-      - http:
-          method: ANY
-          path: '{proxy+}'
+custom:
+  # Nombre base del proyecto
+  name: EXAMPLE-API
+  # AccountID de la cuenta de AWS
+  accountId: 970780172726
+
+functions: ${file(config/serverless/functions.yml)}
+
+package:
+  exclude:
+    - ./**
+  include:
+    - dist/**
+    - node_modules/**
